@@ -2,11 +2,18 @@ import { Camera, Palette, ShieldCheck } from "lucide-react";
 import { useState } from "react";
 import { C, Eyebrow, PageHero, Section } from "./ui";
 
-const AMOUNTS = ["$25", "$50", "$100", "$250", "$500", "Other"];
+const AMOUNTS = ["$10", "$20", "$50", "$100", "$500", "Other"];
+const EMAIL = "kathy.g.patrick@gmail.com";
 
 export function DonatePage() {
   const [amount, setAmount] = useState("$100");
   const [freq, setFreq] = useState<"once" | "monthly">("once");
+  const [honor, setHonor] = useState("");
+  const [comment, setComment] = useState("");
+  const mailto = () => {
+    const body = `Hi Kathy,\n\nI would like to give ${amount === "Other" ? "a gift" : amount}${freq === "monthly" ? " a month" : " (one time)"} to Willadene's Quilts.${honor ? `\nIn honor of: ${honor}` : ""}${comment ? `\n\n${comment}` : ""}\n\nPlease let me know how to send it.\n`;
+    window.location.href = `mailto:${EMAIL}?subject=${encodeURIComponent("Donation to Willadene's Quilts")}&body=${encodeURIComponent(body)}`;
+  };
 
   return (
     <div>
@@ -76,10 +83,28 @@ export function DonatePage() {
               className="mt-2 w-full rounded-xl px-4 py-3 text-[15px] outline-none"
               style={{ background: "#FBF7F1", border: "1.5px solid #EADFD0" }}
               placeholder="A name we should stitch this gift to"
+              value={honor}
+              onChange={e => setHonor(e.target.value)}
+            />
+
+            <label
+              className="mt-6 block text-[13px] uppercase tracking-[0.14em]"
+              style={{ color: "#8A7C79" }}
+            >
+              Comment (optional)
+            </label>
+            <textarea
+              rows={3}
+              maxLength={100}
+              value={comment}
+              onChange={e => setComment(e.target.value)}
+              className="mt-2 w-full rounded-xl px-4 py-3 text-[15px] outline-none resize-y"
+              style={{ background: "#FBF7F1", border: "1.5px solid #EADFD0" }}
             />
 
             <button
               type="button"
+              onClick={mailto}
               className="mt-7 w-full rounded-full py-4 text-[16px] font-semibold text-white"
               style={{ background: C.plum }}
             >
@@ -87,7 +112,7 @@ export function DonatePage() {
               {freq === "monthly" ? " a month" : ""}
             </button>
             <p className="mt-3 text-center text-[12.5px]" style={{ color: "#8A7C79" }}>
-              Preview only &mdash; not yet connected to payment processing.
+              Online giving is coming soon. For now this opens an email to Kathy, who will reply with how to send your gift.
             </p>
 
             <div
@@ -96,7 +121,7 @@ export function DonatePage() {
             >
               <ShieldCheck size={17} style={{ color: C.sage }} className="mt-0.5 shrink-0" />
               Willadene&rsquo;s Quilts is a registered 501(c)(3) nonprofit. Your donation is tax
-              deductible and you will receive a receipt by email.
+              deductible, and Kathy will send you a receipt.
             </div>
           </div>
 

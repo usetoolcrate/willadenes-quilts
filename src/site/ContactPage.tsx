@@ -18,6 +18,7 @@ function Field({
         {label}
       </span>
       <input
+        name={label}
         type={type}
         placeholder={placeholder}
         className="mt-2 w-full rounded-xl px-4 py-3 text-[15px] outline-none"
@@ -45,7 +46,7 @@ export function ContactPage() {
             <h2 className="serif text-[26px]" style={{ color: C.plumDeep }}>
               Send a message
             </h2>
-            <div className="mt-7 grid sm:grid-cols-2 gap-5">
+            <form id="contact-form" className="mt-7 grid sm:grid-cols-2 gap-5" onSubmit={e => e.preventDefault()}>
               <Field label="First name" placeholder="Kathy" />
               <Field label="Last name" placeholder="Patrick" />
               <Field label="Email" type="email" placeholder="you@example.com" wide />
@@ -58,22 +59,30 @@ export function ContactPage() {
                   How can we help?
                 </span>
                 <textarea
+                  name="message"
                   rows={5}
                   placeholder="I'd like to quilt / I have fabric to donate / I know someone in treatment..."
                   className="mt-2 w-full rounded-xl px-4 py-3 text-[15px] outline-none resize-y"
                   style={{ background: "#FBF7F1", border: "1.5px solid #EADFD0" }}
                 />
               </label>
-            </div>
+            </form>
             <button
               type="button"
+              onClick={() => {
+                const f = document.getElementById("contact-form") as HTMLFormElement;
+                const d = new FormData(f);
+                const name = `${d.get("First name") || ""} ${d.get("Last name") || ""}`.trim();
+                const body = `${d.get("message") || ""}\n\n${name}\n${d.get("Email") || ""}\n${d.get("Phone (optional)") || ""}`;
+                window.location.href = `mailto:kathy.g.patrick@gmail.com?subject=${encodeURIComponent(`Message from ${name || "the website"}`)}&body=${encodeURIComponent(body)}`;
+              }}
               className="mt-7 w-full sm:w-auto rounded-full px-8 py-3.5 text-[15.5px] font-semibold text-white"
               style={{ background: C.plum }}
             >
-              Submit
+              Send message
             </button>
             <p className="mt-3 text-[12.5px]" style={{ color: "#8A7C79" }}>
-              Preview only &mdash; the form is not wired up yet.
+              This opens your email app with your message to Kathy, ready to send.
             </p>
           </div>
 
