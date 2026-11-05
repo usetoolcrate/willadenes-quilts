@@ -6,6 +6,25 @@
     <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Google Analytics: visits, plus taps on phone, text and email links and sent forms
+         (generate_lead). Only the real domain reports, never local runs or previews. -->
+    <script>
+      if (/(^|\.)willadenesquilts\.org$/.test(location.hostname)) {
+        var ga = document.createElement("script");
+        ga.async = true;
+        ga.src = "https://www.googletagmanager.com/gtag/js?id=G-2RFW0VCBW8";
+        document.head.appendChild(ga);
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = function () { dataLayer.push(arguments); };
+        gtag("js", new Date());
+        gtag("config", "G-2RFW0VCBW8");
+        document.addEventListener("click", function (e) {
+          var a = e.target.closest && e.target.closest('a[href^="tel:"], a[href^="sms:"], a[href^="mailto:"]');
+          if (a) gtag("event", { "tel:": "phone_click", "sms:": "text_click", "mailto:": "email_click" }[a.protocol]);
+        }, true);
+        document.addEventListener("submit", function () { gtag("event", "generate_lead", { page_path: location.pathname }); }, true);
+      }
+    </script>
     <title>Willadene's Quilts | Handmade comfort for women facing breast cancer</title>
     <meta name="description" content="Willadene's Quilts is a 501(c)(3) nonprofit that hand-makes and hand-delivers quilts to women in breast cancer treatment. Sponsor a quilt for $100, donate fabric, or join us as a quilter." />
     <link rel="canonical" href="https://willadenesquilts.org/" />
